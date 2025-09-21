@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'rest_framework', 
+    'drf_spectacular',
     'django_filters',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -150,6 +151,7 @@ REST_FRAMEWORK = {
         "rest_framework.filters.OrderingFilter",
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
+     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 
@@ -163,3 +165,10 @@ SIMPLE_JWT = {
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "E-Commerce API",
+    "DESCRIPTION": "Backend API for managing products, categories, orders, and users.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
