@@ -4,6 +4,16 @@ from rest_framework import viewsets, permissions, filters
 
 from .models import Category, Product, Order
 from .serializers import CategorySerializer, ProductSerializer, OrderSerializer
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'index.html')
+
+def login_view(request):
+    return render(request, 'login.html')
+
+def products_view(request):
+    return render(request, 'products.html')
 
 
 # --- Custom Permissions ---

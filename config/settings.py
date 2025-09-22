@@ -35,7 +35,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'rest_framework', 
-    'drf_spectacular',
     'django_filters',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -86,16 +85,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ecommerce_db',
-        'USER': 'postgres',
-        'PASSWORD': 'Osoro9850',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': config("POSTGRES_DB", default="ecommerce_db"),
+        'USER': config("POSTGRES_USER", default="ecommerce_user"),
+        'PASSWORD': config("POSTGRES_PASSWORD", default="secret"),
+        'HOST': config("POSTGRES_HOST", default="db"),
+        'PORT': config("POSTGRES_PORT", default="5432"),
     }
 }
-
-
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
