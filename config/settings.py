@@ -89,7 +89,7 @@ DATABASES = {
         "NAME": os.getenv("DATABASE_NAME", "ecommerce_db_pzfw"),
         "USER": os.getenv("DATABASE_USER", "ecommerce_db_pzfw_user"),
         "PASSWORD": os.getenv("DATABASE_PASSWORD", "nUFlko9kW4uDV5iJoIM6ZqAFitRiVBrp"),
-        "HOST": os.getenv("DATABASE_HOST", "dpg-d3airs8gjchc73cn9j5g-a"),
+        "HOST": os.getenv("DATABASE_HOST", "dpg-d3airs8gjchc73cn9j5g-a.render.com"),
         "PORT": int(os.getenv("DATABASE_PORT", 5432)),
     }
 }
