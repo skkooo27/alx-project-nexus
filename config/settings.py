@@ -33,8 +33,13 @@ SECRET_KEY = config(
     "SECRET_KEY", 
     default="django-insecure-$!fwdj4v-%ojnqoz=u((5d9ry$trn1v-4-5+9p^0132ih0n^05"
 )
+
 DEBUG = config("DEBUG", default=True, cast=bool)
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="*").split(",")
+
+ALLOWED_HOSTS = config(
+    "ALLOWED_HOSTS",
+    default="*"
+).split(",")
 
 INSTALLED_APPS = [
     "rest_framework",
