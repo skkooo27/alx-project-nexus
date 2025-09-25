@@ -86,14 +86,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-# Database configuration
+#Database configurations
 
+#Detect if running on Render
 ON_RENDER = os.getenv("RENDER", "False") == "True"
 
 DATABASES = {
     "default": dj_database_url.config(
         default=os.getenv("DATABASE_URL") or f"postgresql://{os.getenv('DATABASE_USER')}:{os.getenv('DATABASE_PASSWORD')}@{os.getenv('DATABASE_HOST')}:{os.getenv('DATABASE_PORT')}/{os.getenv('DATABASE_NAME')}",
-        conn_max_age=600  
+        conn_max_age=600,
+        ssl_require=True  # <-- this enforces SSL
     )
 }
 
