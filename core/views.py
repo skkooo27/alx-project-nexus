@@ -1,10 +1,12 @@
 from django.utils.text import slugify
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions, filters
-
+from django.shortcuts import render
+from django.core.mail import send_mail
 from .models import Category, Product, Order
 from .serializers import CategorySerializer, ProductSerializer, OrderSerializer
-from django.shortcuts import render
+from .tasks import send_order_confirmation
+
 
 def index(request):
     return render(request, 'index.html')
@@ -81,4 +83,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         # Automatically assign logged-in user as the customer
-        serializer.save(customer=self.request.user)
+        order = serializer.save(customer=self.request.user)
+
+        # Trigger Celery task to send order confirmation email
+        send_order_confirmation_email.delay(order.id)

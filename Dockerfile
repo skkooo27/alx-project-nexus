@@ -8,13 +8,15 @@ ENV PYTHONUNBUFFERED 1
 # Set work directory
 WORKDIR /app
 
-# Install system dependencies (for psycopg2 + Pillow)
+# Install system dependencies
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
     libjpeg-dev \
     zlib1g-dev \
+    libfreetype6-dev \
+    liblcms2-dev \
  && rm -rf /var/lib/apt/lists/*
 
 # Install pip requirements
@@ -25,12 +27,13 @@ RUN pip install --no-cache-dir --upgrade pip \
 # Copy project files
 COPY . .
 
-# Security: run as non-root user
-RUN useradd -m django
+# Security: create and use non-root user
+RUN useradd -m django \
+ && chown -R django:django /app
 USER django
 
 # Expose port for Django dev server
 EXPOSE 8000
 
-# Default command (overridden in docker-compose.yml)
+# Default command for development
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
