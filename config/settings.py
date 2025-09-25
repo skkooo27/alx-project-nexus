@@ -81,16 +81,19 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 # Database configuration
+import os
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "ecommerce_db_pzfw",             
-        "USER": "ecommerce_db_pzfw_user",         
-        "PASSWORD": "nUFlko9kW4uDV5iJoIM6ZqAFitRiVBrp",         
-        "HOST": "dpg-d3airs8gjchc73cn9j5g-a",    
-        "PORT": 5432,                             
+        "NAME": os.getenv("DATABASE_NAME", "ecommerce_db_pzfw"),
+        "USER": os.getenv("DATABASE_USER", "ecommerce_db_pzfw_user"),
+        "PASSWORD": os.getenv("DATABASE_PASSWORD", "nUFlko9kW4uDV5iJoIM6ZqAFitRiVBrp"),
+        "HOST": os.getenv("DATABASE_HOST", "dpg-d3airs8gjchc73cn9j5g-a"),
+        "PORT": int(os.getenv("DATABASE_PORT", 5432)),
     }
 }
+
 
 
 # Password validation
