@@ -25,6 +25,7 @@ from pathlib import Path
 import os
 from decouple import config
 from datetime import timedelta
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -81,21 +82,14 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 # Database configuration
-# Detect if running on Render
+
 ON_RENDER = os.getenv("RENDER", "False") == "True"
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DATABASE_NAME", "ecommerce_db_pzfw"),
-        "USER": os.getenv("DATABASE_USER", "ecommerce_db_pzfw_user"),
-        "PASSWORD": os.getenv("DATABASE_PASSWORD", "nUFlko9kW4uDV5iJoIM6ZqAFitRiVBrp"),
-        "HOST": os.getenv(
-            "DATABASE_HOST",
-            "dpg-d3airs8gjchc73cn9j5g-a" if ON_RENDER else "dpg-d3airs8gjchc73cn9j5g-a.render.com"
-        ),
-        "PORT": int(os.getenv("DATABASE_PORT", 5432)),
-    }
+    "default": dj_database_url.config(
+        default=os.getenv("DATABASE_URL") or f"postgresql://{os.getenv('DATABASE_USER')}:{os.getenv('DATABASE_PASSWORD')}@{os.getenv('DATABASE_HOST')}:{os.getenv('DATABASE_PORT')}/{os.getenv('DATABASE_NAME')}",
+        conn_max_age=600  
+    )
 }
 
 
