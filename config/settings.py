@@ -81,7 +81,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 # Database configuration
-import os
+# Detect if running on Render
+ON_RENDER = os.getenv("RENDER", "False") == "True"
 
 DATABASES = {
     "default": {
@@ -89,7 +90,10 @@ DATABASES = {
         "NAME": os.getenv("DATABASE_NAME", "ecommerce_db_pzfw"),
         "USER": os.getenv("DATABASE_USER", "ecommerce_db_pzfw_user"),
         "PASSWORD": os.getenv("DATABASE_PASSWORD", "nUFlko9kW4uDV5iJoIM6ZqAFitRiVBrp"),
-        "HOST": os.getenv("DATABASE_HOST", "dpg-d3airs8gjchc73cn9j5g-a.render.com"),
+        "HOST": os.getenv(
+            "DATABASE_HOST",
+            "dpg-d3airs8gjchc73cn9j5g-a" if ON_RENDER else "dpg-d3airs8gjchc73cn9j5g-a.render.com"
+        ),
         "PORT": int(os.getenv("DATABASE_PORT", 5432)),
     }
 }
