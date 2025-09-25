@@ -84,13 +84,14 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DATABASE_NAME", default="ecommerce_db"),
-        "USER": config("DATABASE_USER", default="ecommerce_user"),
-        "PASSWORD": config("DATABASE_PASSWORD", default="secret"),
-        "HOST": config("DATABASE_HOST", default="db"),
-        "PORT": config("DATABASE_PORT", default=5432, cast=int),
+        "NAME": "ecommerce_db_pzfw",             
+        "USER": "ecommerce_db_pzfw_user",         
+        "PASSWORD": "nUFlko9kW4uDV5iJoIM6ZqAFitRiVBrp",         
+        "HOST": "dpg-d3airs8gjchc73cn9j5g-a",    
+        "PORT": 5432,                             
     }
 }
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
