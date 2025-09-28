@@ -87,16 +87,13 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 #Database configurations
-# Database configurations
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.getenv("", "sqlite:///db.sqlite3"),  # Fallback to SQLite locally
+        default=os.getenv("DATABASE_URL"),  # <-- use this env variable
         conn_max_age=600,
-        ssl_require=bool(os.getenv("DATABASE_URL")), 
+        ssl_require=True,  # always use SSL for production
     )
 }
-
-
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
