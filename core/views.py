@@ -99,7 +99,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         order = serializer.save(customer=self.request.user)
 
         # Trigger Celery task (make sure function name matches in tasks.py)
-        send_order_confirmation.delay(order.id)
+        send_order_confirmation.delay(order.customer.email, order.id)
 
 
 # --- User Registration ---
