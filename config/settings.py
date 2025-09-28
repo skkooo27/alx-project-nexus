@@ -36,9 +36,16 @@ SECRET_KEY = config(
 
 DEBUG = config("DEBUG", default=True, cast=bool)
 
+# ALLOWED_HOSTS
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
-    default="*"
+    default="localhost,127.0.0.1,alx-project-nexus-production-e7d8.up.railway.app"
+).split(",")
+
+# CSRF Trusted Origins
+CSRF_TRUSTED_ORIGINS = config(
+    "CSRF_TRUSTED_ORIGINS",
+    default="https://alx-project-nexus-production-e7d8.up.railway.app"
 ).split(",")
 
 INSTALLED_APPS = [
@@ -170,4 +177,5 @@ CELERY_RESULT_SERIALIZER = "json"
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 
