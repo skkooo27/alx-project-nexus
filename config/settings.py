@@ -26,6 +26,8 @@ import os
 from decouple import config
 from datetime import timedelta
 import dj_database_url
+from celery import Celery
+import ssl
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -177,5 +179,13 @@ CELERY_RESULT_SERIALIZER = "json"
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Celery configuration using Upstash Redis
+CELERY_BROKER_URL = "redis://default:ATWqAAIncDIwMTA4NWFkMDY5MTk0MmUzODMyOTY5ZDNkMzc4OWVmM3AyMTM3Mzg@robust-kangaroo-13738.upstash.io:6379/0"
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
 
 
