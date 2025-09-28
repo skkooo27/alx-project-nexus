@@ -67,3 +67,19 @@ class OrderSerializer(serializers.ModelSerializer):
         instance.update_total()
         return instance
 
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "password"]
+
+    def create(self, validated_data):
+        # Create user with hashed password
+        user = User(
+            username=validated_data["username"],
+            email=validated_data.get("email", "")
+        )
+        user.set_password(validated_data["password"])
+        user.save()
+        return user

@@ -1,11 +1,16 @@
 from django.utils.text import slugify
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, permissions, filters
+from rest_framework import viewsets, permissions, filters, generics
 from django.shortcuts import render
-from django.core.mail import send_mail
+from django.contrib.auth.models import User
 from .models import Category, Product, Order
-from .serializers import CategorySerializer, ProductSerializer, OrderSerializer
-from .tasks import send_order_confirmation
+from .serializers import (
+    CategorySerializer,
+    ProductSerializer,
+    OrderSerializer,
+    UserRegistrationSerializer,
+)
+from .tasks import send_order_confirmation  
 
 
 def index(request):
@@ -25,7 +30,7 @@ class IsAdminOrReadOnly(permissions.BasePermission):
     Write: only for admin users.
     """
     def has_permission(self, request, view):
-        if request.method in permissions.SAFE_METHODS:  # GET, HEAD, OPTIONS
+        if request.method in permissions.SAFE_METHODS:  
             return True
         return request.user and request.user.is_staff
 
@@ -85,5 +90,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         # Automatically assign logged-in user as the customer
         order = serializer.save(customer=self.request.user)
 
-        # Trigger Celery task to send order confirmation email
-        send_order_confirmation_email.delay(order.id)
+        # Trigger Celery task (make sure function name matches in tasks.py)
+        send_order_confirmation.delay(order.id)
+
+
+# --- User Registration ---
+class UserRegistrationView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserRegistrationSerializer
