@@ -2,17 +2,22 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 
-from rest_framework import viewsets, permissions, filters, generics
+from rest_framework import viewsets, permissions, filters, generics, status
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models import Category, Product, Order
+from .models import Category, Product, Order, CartItem
 from .serializers import (
     CategorySerializer,
     ProductSerializer,
     OrderSerializer,
     UserRegistrationSerializer,
+    CartItemSerializer,
 )
 from .tasks import send_order_confirmation
   
@@ -101,4 +106,26 @@ class OrderViewSet(viewsets.ModelViewSet):
 class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
-    permission_classes = [AllowAny] 
+    permission_classes = [AllowAny]
+
+
+# --- Login (JWT) ---
+# This is handled by TokenObtainPairView in urls.py, no custom view needed
+# But if you want a custom response:
+class CustomTokenObtainPairView(TokenObtainPairView):
+    """
+    Returns JWT access and refresh tokens
+    """
+    pass
+
+
+# --- Add to Cart View ---
+class AddToCartView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        serializer = CartItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response({"message": "Product added to cart", "cart": serializer.data}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

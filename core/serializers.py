@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Category, Product, Order, OrderItem
+from .models import Category, Product, Order, OrderItem, CartItem
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -27,6 +27,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         model = OrderItem
         fields = ["id", "product", "product_name", "quantity", "price"]
         read_only_fields = ["id", "price", "product_name"] 
+
 
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True)
@@ -68,6 +69,7 @@ class OrderSerializer(serializers.ModelSerializer):
         instance.update_total()
         return instance
 
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -76,7 +78,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "email", "password"]
 
     def create(self, validated_data):
-        # Create user with hashed password
         user = User(
             username=validated_data["username"],
             email=validated_data.get("email", "")
@@ -84,3 +85,17 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
         return user
+
+
+# --- Cart Item Serializer ---
+class CartItemSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source="product.name", read_only=True)
+
+    class Meta:
+        model = CartItem
+        fields = ["id", "product", "product_name", "quantity", "user"]
+        read_only_fields = ["id", "product_name", "user"]
+
+    def create(self, validated_data):
+        # Assign the logged-in user automatically in the view
+        return CartItem.objects.create(**validated_data)

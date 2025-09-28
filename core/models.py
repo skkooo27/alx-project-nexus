@@ -18,7 +18,6 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-
 class Product(models.Model):
     name = models.CharField(max_length=200, db_index=True)
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
@@ -38,7 +37,7 @@ class Product(models.Model):
         ordering = ['-created_at']
         indexes = [
             models.Index(fields=['slug']),
-            models.Index(fields=['category', 'price']),   # compound index
+            models.Index(fields=['category', 'price']),
             models.Index(fields=['-created_at']),
         ]
 
@@ -51,13 +50,11 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='product_images/')
     alt_text = models.CharField(max_length=255, blank=True)
     is_main = models.BooleanField(default=False)
-
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -86,7 +83,7 @@ class Order(models.Model):
     class Meta:
         ordering = ['-created_at']
         indexes = [
-            models.Index(fields=['customer', 'status']),  # compound index
+            models.Index(fields=['customer', 'status']),
             models.Index(fields=['-created_at']),
         ]
 
@@ -98,7 +95,6 @@ class Order(models.Model):
         self.total_price = total
         self.save()
 
-
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items", db_index=True)
     product = models.ForeignKey("Product", on_delete=models.PROTECT, db_index=True)
@@ -109,7 +105,7 @@ class OrderItem(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['order', 'product']),  # compound index
+            models.Index(fields=['order', 'product']),
         ]
 
     def save(self, *args, **kwargs):
@@ -119,3 +115,24 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.quantity} x {self.product.name} (Order {self.order.id})"
+
+
+# -------------------- Cart Item --------------------
+class CartItem(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name="cart_items"
+    )
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'product')  # prevent duplicate cart items per user
+        indexes = [
+            models.Index(fields=['user', 'product']),
+        ]
+
+    def __str__(self):
+        return f"{self.product.name} x {self.quantity} ({self.user.username})"
