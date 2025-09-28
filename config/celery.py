@@ -15,7 +15,7 @@ REDIS_URL = config(
 app = Celery(
     "config",
     broker=REDIS_URL,
-    backend=REDIS_URL,
+    backend=None,
     include=["core.tasks"]
 )
 
