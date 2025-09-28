@@ -1,6 +1,21 @@
 from django.utils.text import slugify
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions, filters, generics
+from django.utils.text import slugify
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets, permissions, filters, generics
+from rest_framework.permissions import AllowAny 
+from django.shortcuts import render
+from django.contrib.auth.models import User
+from .models import Category, Product, Order
+from .serializers import (
+    CategorySerializer,
+    ProductSerializer,
+    OrderSerializer,
+    UserRegistrationSerializer,
+)
+from .tasks import send_order_confirmation
+
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from .models import Category, Product, Order
