@@ -1,42 +1,99 @@
-# ALX Project Nexus
+# E-Commerce Backend
 
-## Overview
-This repository serves as a documentation hub for my major learnings from the ALX ProDev Backend Engineering Program. The program equipped me with both theoretical knowledge and practical experience in backend engineering. I explored advanced Python, databases,APIs and Devops while also applying backend best practices in security, testing, and performance optimization.
+A scalable E-commerce Backend System built with Django, PostgreSQL, and JWT Authentication.
+This project simulates a real-world backend engineering environment, focusing on database design, API development, performance optimization, and secure authentication.
 
-## Key Technologies Covered
-1. Python(advanced features: generators, decorators, async programming)
-2. Django & Django REST Framework.
-3. GraphQL.
-4. Docker & Kubernetes.
-5. CI/CD Pipelines (GitHub Actions, Jenkins)
-6. Redis.
-7. RabbitMQ.
+## Project Overview
+This backend manages products, categories, and users** for an e-commerce platform.
+It includes CRUD APIs, filtering, sorting, pagination, and JWT authentication, with APIs documented via Swagger/Postman.
 
-## Important Backend Development Concepts
-1. Database & Backend Foundations
--Project planning and database design
--Advanced SQL querying
--Unit and integration testing with pytest.
+## Features
+* User Authentication.
+  * Register, login, JWT-based authentication.
+  * Secure password hashing.
 
-2. DevOps & Microservices
--advanced shell commands and DevOps introduction
--CI/CD pipelines for automation and deployment
--Containerization with Docker and orchestration with Kubernetes
--Microservices architecture design and implementation
+* Product & Category Management
+  * CRUD APIs for products and categories.
+  * Filtering (by category), sorting (by price), and pagination.
 
-3. Security & Performance Optimization
+* API Documentation.
+  * Swagger / Postman collection for API testing.
 
-- Security best practices.
-- Authentication and Authorization: JWT, OAuth, Django auth system
-- Performance optimization through caching.
+* Database Optimization.
+  * PostgreSQL schema with indexes for faster queries.
 
-## Challenges Faced & Solutions Implemented
 
-- Debugging distributed systems: Solved by implementing structured logging and tracing across microservices.
+## 🛠 Tech Stack
+* Backend Framework: Django REST Framework
+* Database: PostgreSQL
+* Authentication: JWT (djangorestframework-simplejwt)
+* Documentation: Swagger / drf-yasg or Postman
+* Containerization: Docker + Docker Compose
+* Deployment: Railway.
 
-## Best Practices & Personal Takeaways
-- Write tests early to ensure stability.
-- Security is a continuous process, not a one-time setup.
-- Automating deployments with CI/CD reduces errors and saves time.
-- Backend systems should prioritize scalability, reliability, and maintainability.
 
+## System Architecture
+
+[ Client (Frontend) ]
+        |
+     REST API
+        |
+[ Django REST Framework ]
+        |
+[ PostgreSQL Database ]
+
+
+## Setup & Installation
+
+1. Clone repository
+2. Create virtual environment & install dependencies
+3. Configure environment variables
+4. Run migrations
+5. Start server
+
+
+## API Endpoints
+1.  Authentication
+* `POST /api/auth/register/` → Register new user
+* `POST /api/auth/login/` → Login and get JWT
+
+2. Products
+* `GET /api/products/` → List products (supports filtering, sorting, pagination)
+* `POST /api/products/` → Create product (Admin only)
+* `GET /api/products/{id}/` → Get single product
+* `PUT /api/products/{id}/` → Update product
+* `DELETE /api/products/{id}/` → Delete product
+
+3. Categories
+
+* `GET /api/categories/` → List categories
+* `POST /api/categories/` → Create category
+* `GET /api/categories/{id}/` → Get category
+* `PUT /api/categories/{id}/` → Update category
+* `DELETE /api/categories/{id}/` → Delete category
+
+4. Authentication
+
+This project uses JWT Authentication:
+
+* Obtain access and refresh tokens via `/api/auth/login/`.
+* Include access token in request headers:
+
+Authorization: Bearer <access_token>
+
+
+## 📑 API Documentation
+
+Swagger UI available at:
+/swagger/
+
+
+## Performance Optimization
+
+* Added indexes on `category_id` and `price` fields.
+* Used queryset prefetch/select_related to minimize queries.
+* Implemented paginated responses for large datasets.
+
+
+## Future Improvements
+* Add payment gateway integration (Stripe, PayPal).
