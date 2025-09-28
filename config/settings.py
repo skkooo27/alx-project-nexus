@@ -87,11 +87,12 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 #Database configurations
+# Database configurations
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.getenv("DATABASE_URL"),  
+        default=os.getenv("DATABASE_URL", "sqlite:///db.sqlite3"),  # Fallback to SQLite locally
         conn_max_age=600,
-        ssl_require=True
+        ssl_require=bool(os.getenv("DATABASE_URL")), 
     )
 }
 
